@@ -1,0 +1,21 @@
+
+i12alrum@uco.es ---> Correo correcto 
+
+carmen.lara@empresa.com ---> Correo correcto 
+
+pablo.luque_19@ayuda.org ---> Correo correcto 
+
+1jefe@ejemplo.es ---> Correo incorrecto 
+
+error__1@ejemplo.es ---> Correo incorrecto 
+
+error2_@ejemplo.es ---> Correo incorrecto 
+
+i12alrum@ejemplo.es1 ---> Correo incorrecto 
+
+i12alrum@ejemplo.12 ---> Correo incorrecto 
+
+i12alrum@ejemplo.ejemplo ---> Correo incorrecto 
+
+i12alrum@123.es ---> Correo incorrecto 
+Contador de correos correctos: 3

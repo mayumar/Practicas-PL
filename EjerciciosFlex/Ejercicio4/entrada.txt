@@ -1,0 +1,6 @@
+12-12-2000 10:30 documento.txt
+31-02-2000 10:30 documento.txt
+10-03-2023 09:15 fichero2.docx
+10-03-2023 30:30 fichero1.txt
+10-03-2023 09:00 fichero1.pdf
+10-03-2023 09:15 fichero2.docx

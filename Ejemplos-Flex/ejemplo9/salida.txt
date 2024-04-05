@@ -1,0 +1,26 @@
+
+ Palabra reservada: if --> token 257
+(
+
+ Identificador: a --> token 260
+
+ Operador relacional: > --> token 262
+
+ Numero: 0 --> token 261
+)
+
+ Palabra reservada: then --> token 258
+
+ Identificador: b --> token 260
+=
+
+ Identificador: a --> token 260
+;
+
+ Palabra reservada: else --> token 259
+
+ Identificador: b --> token 260
+=
+
+ Identificador: a --> token 260
+;

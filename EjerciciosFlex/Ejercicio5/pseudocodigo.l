@@ -12,6 +12,8 @@
 
 /* Variables globales */
 
+#include "token.h"
+
 
 %}
 
@@ -38,69 +40,78 @@ cadena            \'([^'\\]|\\.)*\'
 /***** Zona de las reglas *****/
 %%
 
-inicio                  {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-fin                     {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-leer                    {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-escribir                {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-si                      {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-entonces                {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-si_no                   {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-fin_si                  {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-mientras                {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-hacer                   {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-fin_mientras            {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-repetir                 {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-hasta_que               {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-para                    {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-desde                   {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-hasta                   {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-paso                    {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
-fin_para                {fprintf(yyout, "\n Palabra reservada reconocida: %s \n", yytext);}
+inicio                  {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, INICIO);}
+fin                     {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, FIN);}
+leer                    {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, LEER);}
+escribir                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, ESCRIBIR);}
+si                      {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, SI);}
+entonces                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, ENTONCES);}
+si_no                   {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, SI_NO);}
+fin_si                  {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, FIN_SI);}
+mientras                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, MIENTRAS);}
+hacer                   {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, HACER);}
+fin_mientras            {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, FIN_MIENTRAS);}
+repetir                 {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, REPETIR);}
+hasta_que               {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, HASTA_QUE);}
+para                    {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, PARA);}
+desde                   {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, DESDE);}
+hasta                   {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, HASTA);}
+paso                    {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, PASO);}
+fin_para                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, FIN_PARA);}
 
-{identificador}         {fprintf(yyout, "\n Identificador reconocido: %s \n", yytext);}
+{identificador}         {fprintf(yyout, "\n Identificador: %s --> token %d \n", yytext, ID);}
 
-{entero}                {fprintf(yyout, "\n Numero reconocido: %s \n", yytext);}
-{real}                  {fprintf(yyout, "\n Numero reconocido: %s \n", yytext);}
-{not_cient}             {fprintf(yyout, "\n Numero reconocido: %s \n", yytext);}
+{entero}                {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
+{real}                  {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
+{not_cient}             {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
 
-{cadena}                {fprintf(yyout, "\n Cadena reconocida: %s \n", yytext);}
+{cadena}                {yytext[yyleng-1] = '\0'; yytext++; yyleng--;
+                         fprintf(yyout, "\n Cadena: <%s> \n", yytext);}
 
-:=                      {fprintf(yyout, "\n Asignacion reconocida: %s \n", yytext);}
-\+=                     {fprintf(yyout, "\n Asignacion reconocida: %s \n", yytext);}
-\-=                     {fprintf(yyout, "\n Asignacion reconocida: %s \n", yytext);}
-\*=                     {fprintf(yyout, "\n Asignacion reconocida: %s \n", yytext);}
-\/=                     {fprintf(yyout, "\n Asignacion reconocida: %s \n", yytext);}
+:=                      {fprintf(yyout, "\n Asignacion: %s --> token %d \n", yytext, ASIGNACION);}
+\+=                     {fprintf(yyout, "\n Asignacion con suma: %s --> token %d \n", yytext, ASIGNACIONSUMA);}
+\-=                     {fprintf(yyout, "\n Asignacion con resta: %s --> token %d \n", yytext, ASIGNACIONRESTA);}
+\*=                     {fprintf(yyout, "\n Asignacion con producto: %s --> token %d \n", yytext, ASIGNACIONPRODUCTO);}
+\/=                     {fprintf(yyout, "\n Asignacion con división: %s --> token %d \n", yytext, ASIGNACIONDIVISION);}
 
-\+                      {fprintf(yyout, "\n Suma reconocida: %s \n", yytext);}
-\+\+                    {fprintf(yyout, "\n Incremento reconocido: %s \n", yytext);}
-\-                      {fprintf(yyout, "\n Resta reconocida: %s \n", yytext);}
-\-\-                    {fprintf(yyout, "\n Decremento reconocido: %s \n", yytext);}
-\*                      {fprintf(yyout, "\n Producto reconocido: %s \n", yytext);}
-\/                      {fprintf(yyout, "\n Division reconocida: %s \n", yytext);}
-\/\/                    {fprintf(yyout, "\n Division entera reconocida: %s \n", yytext);}
-%                       {fprintf(yyout, "\n Modulo reconocido: %s \n", yytext);}
-\*\*                    {fprintf(yyout, "\n Potencia reconocida: %s \n", yytext);}
+\+                      {fprintf(yyout, "\n Suma: %s --> token %d \n", yytext, SUMA);}
+\+\+                    {fprintf(yyout, "\n Incremento: %s --> token %d \n", yytext, INCREMENTO);}
+\-                      {fprintf(yyout, "\n Resta: %s --> token %d \n", yytext, RESTA);}
+\-\-                    {fprintf(yyout, "\n Decremento: %s --> token %d \n", yytext, DECREMENTO);}
+\*                      {fprintf(yyout, "\n Producto: %s --> token %d \n", yytext, PRODUCTO);}
+\/                      {fprintf(yyout, "\n Division: %s --> token %d \n", yytext, DIVISION);}
+\/\/                    {fprintf(yyout, "\n Division entera: %s --> token %d \n", yytext, DIVISION_ENTERA);}
+%                       {fprintf(yyout, "\n Modulo: %s --> token %d \n", yytext, MODULO);}
+\*\*                    {fprintf(yyout, "\n Potencia: %s --> token %d \n", yytext, POTENCIA);}
 
-\|\|                    {fprintf(yyout, "\n Concatenacion reconocida: %s \n", yytext);}
+\|\|                    {fprintf(yyout, "\n Concatenacion: %s --> token %d \n", yytext, CONCATENACION);}
 
-\<                      {fprintf(yyout, "\n Menor que reconocido: %s \n", yytext);}
-\<=                     {fprintf(yyout, "\n Menor o igual que reconocido: %s \n", yytext);}
-\>                      {fprintf(yyout, "\n Mayor que reconocido: %s \n", yytext);}
-\>=                     {fprintf(yyout, "\n Mayor o igula que reconocido: %s \n", yytext);}
-==                      {fprintf(yyout, "\n Igual que reconocido: %s \n", yytext);}
-\<\>                    {fprintf(yyout, "\n Distinto que reconocido: %s \n", yytext);}
+#o                      {fprintf(yyout, "\n Disyuncion logica: %s --> token %d \n", yytext, DISYUNCION_LOGICA);}
+#y                      {fprintf(yyout, "\n Conjuncion logica: %s --> token %d \n", yytext, CONJUNCION_LOGICA);}
+#no                     {fprintf(yyout, "\n Negacion logica: %s --> token %d \n", yytext, NEGACION_LOGICA);}
 
-\<\<                    {BEGIN COMENTARIO_LARGO; fprintf(yyout, "\n Comienza comentario \n");}
+\<                      {fprintf(yyout, "\n Menor que: %s --> token %d \n", yytext, MENOR_QUE);}
+\<=                     {fprintf(yyout, "\n Menor o igual que: %s --> token %d \n", yytext, MENOR_IGUAL_QUE);}
+\>                      {fprintf(yyout, "\n Mayor que: %s --> token %d \n", yytext, MAYOR_QUE);}
+\>=                     {fprintf(yyout, "\n Mayor o igula que: %s --> token %d \n", yytext, MAYOR_IGUAL_QUE);}
+==                      {fprintf(yyout, "\n Igual que: %s --> token %d \n", yytext, IGUAL);}
+\<\>                    {fprintf(yyout, "\n Distinto que: %s --> token %d \n", yytext, DISTINTO);}
 
-<COMENTARIO_LARGO>\>\>  {BEGIN INITIAL; fprintf(yyout, "\n Fin del comentario \n");}
+;                       {fprintf(yyout, "\n Fin de sentencia: %s --> token %d \n", yytext, FIN_SENTENCIA);}
+\(                      {fprintf(yyout, "\n Parentesis izquierdo: %s --> token %d \n", yytext, PARENTESIS_IZQUIERDO);}
+\)                      {fprintf(yyout, "\n Parentesis derecho: %s --> token %d \n", yytext, PARENTESIS_DERECHO);}
 
-<COMENTARIO_LARGO>.*    {fprintf(yyout, "\n Comentario reconocido: %s \n", yytext);}
+\<\<                    {BEGIN COMENTARIO_LARGO; fprintf(yyout, "\n Comienza comentario multilinea: %s --> token %d \n", yytext, COMENTARIO_ML_ABRE);}
 
-!!                      {BEGIN COMENTARIO_CORTO; fprintf(yyout, "\n Comienza comentario \n");}
+<COMENTARIO_LARGO>\>\>  {BEGIN INITIAL; fprintf(yyout, "\n Fin del comentario multilinea: %s --> token %d \n", yytext, COMENTARIO_ML_CIERRA);}
 
-<COMENTARIO_CORTO>\n    {BEGIN INITIAL; fprintf(yyout, "\n Termina comentario \n");}
+<COMENTARIO_LARGO>.*    {fprintf(yyout, "\n Comentario multilinea: <%s> \n", yytext);}
 
-<COMENTARIO_CORTO>.*    {fprintf(yyout, "\n Comentario reconocido: %s \n", yytext);}
+!!                      {BEGIN COMENTARIO_CORTO; fprintf(yyout, "\n Comienza comentario una linea: %s --> token %d \n", yytext, COMENTARIO_UNALINEA);}
+
+<COMENTARIO_CORTO>\n    {BEGIN INITIAL; fprintf(yyout, "\n Termina comentario una linea \n");}
+
+<COMENTARIO_CORTO>.*    {fprintf(yyout, "\n Comentario una linea: <%s> \n", yytext);}
 
 %%
 

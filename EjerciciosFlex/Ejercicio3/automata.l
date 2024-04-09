@@ -58,10 +58,33 @@ int main(int argc, char *argv[])
  
  switch(argc)
   {
-   case 2:  yyin=fopen(argv[1],"r"); 
-            break;
-   case 3:  yyin=fopen(argv[1],"r"); 
-            yyout=fopen(argv[2],"w"); 
+   case 2:
+      yyin=fopen(argv[1],"r");
+
+      if(yyin == NULL){
+         printf("\n Error, El fichero de entrada no existe \n");
+         return -1;
+      }
+
+      break;
+
+   case 3:
+      yyin=fopen(argv[1],"r");
+
+      if(yyin == NULL){
+         printf("\n Error, El fichero de entrada no existe \n");
+         return -1;
+      }
+
+      yyout=fopen(argv[2],"r");
+
+      if(yyin != NULL){
+         printf("\n Error, El fichero de salida ya existe \n");
+         return -1;
+      }else{
+         yyout=fopen(argv[2],"w");
+      }
+
   }
   yylex();
 

@@ -13,6 +13,7 @@
 #include <stdbool.h>
 
 bool fechaValida(int day, int month, int year);
+bool horaValida(const char *hora);
 
 /* Variables globales */
 
@@ -29,9 +30,6 @@ dia            0[1-9]|[1-2][0-9]|3[0-1]
 mes            0[1-9]|1[0-2]
 ano            [0-9]{4}
 
-hora           0[1-9]|1[0-9]|2[0-4]
-minuto         [0-5][0-9]
-
 letra          [a-z]
 digito         [0-9]
 punto          \.
@@ -39,7 +37,7 @@ nombre         ({letra}|{digito})+
 extension      ({letra}|{digito})+
 
 fecha          {dia}-{mes}-{ano}
-tiempo         {hora}:{minuto}
+hora           [0-9][0-9]:[0-9][0-9]
 documento      {nombre}{punto}{extension}
 
 
@@ -60,18 +58,28 @@ documento      {nombre}{punto}{extension}
                            fprintf(yyout, "\n Fecha erronea (Vuelve al estado inicial) \n");
                         }}
 
-<Q1>{tiempo}           {BEGIN Q2; fprintf(yyout, "\n Hora reconocida (Pasamos a Q2) \n");}
+<Q1>\ {hora}             {BEGIN Q2;
+                        if(horaValida(yytext)){
+                           fprintf(yyout, "\n Hora reconocida (Pasamos a Q2) \n");
+                        }else{
+                           BEGIN INITIAL;
+                           fprintf(yyout, "\n Hora erronea (Vuelve al estado inicial) \n");
+                        }}
 
-<Q2>{documento}\n?     {BEGIN INITIAL; fprintf(yyout, "\n Documento reconocido (Pasamos a Q0) \n");
+<Q2>\ {documento}\n?     {BEGIN INITIAL; fprintf(yyout, "\n Documento reconocido (Pasamos a Q0) \n");
                         total_documentos++; documentos_por_dia[day]++;}
 
+[^0-9].*\n             {fprintf(yyout,"\n Secuencia incorrecta --> %s \n", yytext);}
 
+<Q1>[^0-9\ ].*\n       {fprintf(yyout, "\n Secuencia incorrecta (Vuelve al estado inicial) --> %s \n", yytext); BEGIN INITIAL;}
+
+<Q2>.*               {fprintf(yyout, "\n Secuencia incorrecta (Vuelve al estado inicial) --> %s \n", yytext); BEGIN INITIAL;}
+
+.|\n {}
 
 %%
 /*
-[^0-9].*\n             {fprintf(yyout,"\n %s ---> Secuencia incorrecta \n", yytext);}
 
-<Q1>[^0-9].*\n         {fprintf(yyout,"\n %s ---> Secuencia incorrecta \n", yytext);}
 */
 
 /***** Zona de funciones auxiliares *****/
@@ -83,16 +91,39 @@ int main(int argc, char *argv[])
  
  switch(argc)
   {
-   case 2:  yyin=fopen(argv[1],"r"); 
-            break;
-   case 3:  yyin=fopen(argv[1],"r"); 
-            yyout=fopen(argv[2],"w"); 
+   case 2:
+      yyin=fopen(argv[1],"r");
+
+      if(yyin == NULL){
+         printf("\n Error, El fichero de entrada no existe \n");
+         return -1;
+      }
+
+      break;
+
+   case 3:
+      yyin=fopen(argv[1],"r");
+
+      if(yyin == NULL){
+         printf("\n Error, El fichero de entrada no existe \n");
+         return -1;
+      }
+
+      yyout=fopen(argv[2],"r");
+
+      if(yyin != NULL){
+         printf("\n Error, El fichero de salida ya existe \n");
+         return -1;
+      }else{
+         yyout=fopen(argv[2],"w");
+      }
+
   }
   yylex();
 
   fprintf(yyout, "\n Se han reconocido %d documentos \n", total_documentos);
 
-  int dias_con_documentos = 0;
+   int dias_con_documentos = 0;
    int total_documentos_diarios = 0;
    int i;
    for (i = 0; i < 31; i++) {
@@ -134,4 +165,16 @@ bool fechaValida(int day, int month, int year){
       default:
          return day <= 31;
    }
+}
+
+bool horaValida(const char *hora){
+    int hour, minute;
+
+    if (sscanf(hora, "%d:%d", &hour, &minute) != 2)
+        return false;
+
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59)
+        return false;
+
+    return true;
 }

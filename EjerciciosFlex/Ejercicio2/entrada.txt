@@ -3,4 +3,6 @@ triangulo (2.5 2.5) (1.17 5.0) (2.8 0.0)
 cuadrado (0.0 0.0) (1.0 1.0)
 cuadrado (0.0 0.0) (5.0 5.0)
 círculo (0.0 0.0) 1.0
+triangulo (2.5 2.5)
+circulo
 circulo (1.0 1.0) 2.0

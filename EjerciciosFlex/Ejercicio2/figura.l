@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
 
 float calcularArea(float coords[], int tipo){
   float sol = 0;
+  float diagonal;
 
   switch(tipo){
     case TRIANGULO:
@@ -140,7 +141,7 @@ float calcularArea(float coords[], int tipo){
       break;
     
     case CUADRADO:
-      float diagonal = sqrt(pow(coords[2]-coords[0],2) + pow(coords[3]-coords[1],2));
+      diagonal = sqrt(pow(coords[2]-coords[0],2) + pow(coords[3]-coords[1],2));
       sol = pow(diagonal,2)/2;
       break;
 
@@ -154,6 +155,7 @@ float calcularArea(float coords[], int tipo){
 
 float calcularPerimetro(float coords[], int tipo){
   float sol = 0;
+  float diagonal;
 
   switch(tipo){
     case TRIANGULO:
@@ -163,7 +165,7 @@ float calcularPerimetro(float coords[], int tipo){
       break;
     
     case CUADRADO:
-      float diagonal = sqrt(pow(coords[2]-coords[0],2) + pow(coords[3]-coords[1],2));
+      diagonal = sqrt(pow(coords[2]-coords[0],2) + pow(coords[3]-coords[1],2));
       sol = pow(diagonal,2)/2;
       sol *= 4;
       break;

@@ -1,0 +1,22 @@
+!! Programa que suma los valores positivos de un vector
+
+inicio
+
+    escribir( 'Introduzca elementos del vector' );
+
+    para i desde 0. hasta 10 hacer
+        leer( numero );
+        x( i ) := numero;
+    fin_para
+
+    1suma := 0;
+
+    para __i desde -1 hasta 10 hacer
+        i ( _x(i) > 0 ) entonces
+            su__ma += v( i_ );
+        fin_si
+    fin_para
+
+    escribir( 'La suma de los números positivos es: ' || suma || '\n' );
+
+fin

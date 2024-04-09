@@ -25,11 +25,11 @@ letra             [a-záéíóú]
 digito            [0-9]
 guion             _
 
-identificador     {letra}({letra}|{digito}|{guion}({letra}|{digito}))*
+id                {letra}({letra}|{digito}|{guion}({letra}|{digito}))*
 
-entero            [0-9]+
-real              [0-9]+\.[0-9]+
-not_cient         [0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?
+entero            (-)?[0-9]+
+real              (-)?[0-9]+\.[0-9]+
+not_cient         (-)?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?
 
 cadena            \'([^'\\]|\\.)*\'
 
@@ -59,11 +59,17 @@ hasta                   {fprintf(yyout, "\n Palabra reservada: %s --> token %d \
 paso                    {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, PASO);}
 fin_para                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \n", yytext, FIN_PARA);}
 
-{identificador}         {fprintf(yyout, "\n Identificador: %s --> token %d \n", yytext, ID);}
+{id}                    {fprintf(yyout, "\n Identificador: %s --> token %d \n", yytext, ID);}
 
-{entero}                {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
-{real}                  {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
-{not_cient}             {fprintf(yyout, "\n Numero: %s --> token %d \n", yytext, NUMERO);}
+{id}?__{id}?            {fprintf(yyout, "\n Error en el identificador: %s --> No puede tener dos subrayados seguidos \n", yytext);}
+(_|{digito}){id}        {fprintf(yyout, "\n Error en el identificador: %s --> Debe comenzar por una letra \n", yytext);}
+{id}_                   {fprintf(yyout, "\n Error en el identificador: %s --> No puede acabar en subrayado \n", yytext);}
+
+{entero}                {fprintf(yyout, "\n Numero (entero): %s --> token %d \n", yytext, NUMERO);}
+{real}                  {fprintf(yyout, "\n Numero (real): %s --> token %d \n", yytext, NUMERO);}
+{not_cient}             {fprintf(yyout, "\n Numero (notac. cient.): %s --> token %d \n", yytext, NUMERO);}
+
+{entero}\.               {fprintf(yyout, "\n Error en el numero: %s --> Falta la parte decimal \n", yytext);}
 
 {cadena}                {yytext[yyleng-1] = '\0'; yytext++; yyleng--;
                          fprintf(yyout, "\n Cadena: <%s> \n", yytext);}
@@ -114,8 +120,6 @@ fin_para                {fprintf(yyout, "\n Palabra reservada: %s --> token %d \
 <COMENTARIO_CORTO>.*    {fprintf(yyout, "\n Comentario una linea: <%s> \n", yytext);}
 
 %%
-
-/*^#                {fprintf(yyout, "\n Fin del programa \n"); return 0;}*/
 
 /***** Zona de funciones auxiliares *****/
 
